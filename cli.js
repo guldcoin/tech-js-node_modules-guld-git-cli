@@ -13,13 +13,14 @@ const {
   push,
   pull
 } = require('guld-git')
-const VERSION = require('./package.json').version
+const thispkg = require(`${__dirname}/package.json`)
+const runCLI = require('guld-cli-run')
 
 /* eslint-disable no-console */
 program
-  .name('guld-git')
-  .version(VERSION)
-  .description('Guld standardized CLI for git.')
+  .name(thispkg.name.replace('-cli', ''))
+  .version(thispkg.version)
+  .description(thispkg.description)
   .option('-C --cwd <dir>', 'Set current working directory before running.', d => {
     process.chdir(path.resolve(d))
   })
@@ -98,4 +99,5 @@ program
   })
 /* eslint-enable no-console */
 
-program.parse(process.argv)
+runCLI.bind(program)()
+module.exports = program
